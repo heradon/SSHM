@@ -1,90 +1,6 @@
-#!/bin/msh
+#!/usr/bin/env bash
 
-#=============================================================#
-# remotegui - a gui to connect to ssh and telnet servers
-# License: GNU GPL v3 or later at your option
-# Author:  Florian Bruhin (The Compiler) <florianbruh@gmail.com>
 version="1.47"
-# Copyright 2009 Florian Bruhin
-#=============================================================#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with the this program.  If not, see <http://www.gnu.org/licenses/>.
-#=============================================================#
-
-#=============================================================#
-# TODO:
-#=============================================================#
-#
-# - Check for characters like ` in the dialogs.
-# - fix checks on Edit
-# - Test everything, especially error messages
-# - Fix the bug at "Menu > Edit ... > Cancel
-#=============================================================#
-# CHANGELOG:
-#=============================================================#
-#
-# V1.0
-# - Initial release
-#
-# V1.1 (unreleased)
-# - Multiple servers didn't work in DSLinux, rewrote big parts
-#   to get it working
-# - Added the version numberto the title
-# - Fixed and improved Menu
-#
-# V1.2 (unreleased)
-# - Prepared some things for the support of telnet 
-#
-# V1.4 (unreleased)
-# - Finally added support for Telnet (and extendable to many other programms if necessary)
-# - Fixed bugs. MANY bugs
-# - Speeded up many things
-# - Added a startup message
-# - Added some sanity checks while starting
-#
-# V1.41 (unreleased)
-# - Altered the connection-code a bit to make it shorter and more portable to other applications
-# - Cleaned up the code
-#
-# V1.42 (unreleased)
-# - Added license texts
-#
-# V1.43 (unreleased)
-# - Expanded the menu and moved "Add" to the menu
-# - Added the sanity checks of Add also to Edit
-#
-# V1.44 (unreleased)
-# - Fixed the edit function
-# - Added an option to change the type of a profile
-#
-# V1.45
-# - Fixed a typo and a bug which caused ssh and telnet to don't connect at all (was in holydays for the unreleased versions so I couldn't test connecting
-# - Fixed the version variable
-#
-# V1.46 
-# - Don't show Edit/Delete/... in the menu if there are no servers
-# - Add "s in the menu
-# 
-# V1.47
-# - Improved startup time
-# - go back to the 'Show license' dialog after viewing the full license, not to the men
-# - fixed a bug in the menu when there were no servers and you choosed an option then pressed cancel
-# - Added a 'noservers' option for debugging purposes
-
-#=============================================================#
-# User-changeable settings
-#=============================================================#
-
 # Directory remotegui uses for all its files, w/o a trailing, but with a startig slash, e.g. /home/florian
 dir="$HOME/.remotegui"
 
@@ -108,8 +24,10 @@ OLDIFS="$IFS"
 license="remotegui - a gui to connect to ssh and telnet servers
 License: GNU GPL v3 or later at your option
 Author:  Florian Bruhin (The Compiler) <florianbruh@gmail.com>
+Mod: Ralf Matthes <info@rmatthes.de>
 version: $version
 Copyright 2009 Florian Bruhin
+Copyright 2016 Ralf Matthes
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -118,16 +36,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 about="remotegui - a gui to connect to ssh and telnet servers
 License: GNU GPL v3 or later at your option
 Author:  Florian Bruhin (The Compiler) <florianbruh@gmail.com>
+Mod: Ralf Matthes <info@rmatthes.de>
 version: $version
 Copyright 2009 Florian Bruhin
-
-If you have any problems or questions, and especially if you found a bug, don't hesistate to contact me via email <florianbruh@gmail.com> or any of the other ways to contact me listed on <www.the-compiler.org>.
-If you like remotegui, it would be cool if you would send me a postcard. I like them ;) My adress:
-
-Florian Bruhin
-Ruchwiesenstrasse 36
-8404 Winterthur
-SWITZERLAND"
+Copyright 2016 Ralf Matthes"
 
 #=============================================================#
 
@@ -142,7 +54,7 @@ echo "$*" | grep -q "noservers" && noservers=1
 #=============================================================#
 
 [ ! -e "$dir/.started" ] && dialog --stdout --backtitle "remotegui V$version" --title "Welcome!" --msgbox "
-Welcome to remotegui by Florian Bruhin / The Compiler <florianbruh@gmail.com>
+Welcome to remotegui by Florian Bruhin / The Compiler <florianbruh@gmail.com> modified by Ralf Matthes <info@rmatthes.de>
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Choose 'license' in the menu for more details.
 

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-version="1.47"
-# Directory remotegui uses for all its files, w/o a trailing, but with a startig slash, e.g. /home/florian
-dir="$HOME/.remotegui"
+version="1.47.1"
+dir="$HOME/.sshm"
 
 # Directory we may use for temporary files
 tmp="/tmp"
@@ -11,7 +10,7 @@ tmp="/tmp"
 # End of the user-changeable settings
 #=============================================================#
 
-dialog --stdout --backtitle "remotegui V$version" --title "Loading..." --infobox "Please wait...
+dialog --stdout --backtitle "SSHM V$version" --title "Loading..." --infobox "Please wait...
 Starting up" 0 0
 
 #=============================================================#
@@ -21,7 +20,7 @@ N="
 "
 OLDIFS="$IFS"
 
-license="remotegui - a gui to connect to ssh and telnet servers
+license="SSHM - a gui to connect to ssh and telnet servers
 License: GNU GPL v3 or later at your option
 Author:  Florian Bruhin (The Compiler) <florianbruh@gmail.com>
 Mod: Ralf Matthes <info@rmatthes.de>
@@ -33,7 +32,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details."
 
-about="remotegui - a gui to connect to ssh and telnet servers
+about="SSHM - a gui to connect to ssh and telnet servers
 License: GNU GPL v3 or later at your option
 Author:  Florian Bruhin (The Compiler) <florianbruh@gmail.com>
 Mod: Ralf Matthes <info@rmatthes.de>
@@ -53,8 +52,8 @@ echo "$*" | grep -q "noservers" && noservers=1
 
 #=============================================================#
 
-[ ! -e "$dir/.started" ] && dialog --stdout --backtitle "remotegui V$version" --title "Welcome!" --msgbox "
-Welcome to remotegui by Florian Bruhin / The Compiler <florianbruh@gmail.com> modified by Ralf Matthes <info@rmatthes.de>
+[ ! -e "$dir/.started" ] && dialog --stdout --backtitle "SSHM V$version" --title "Welcome!" --msgbox "
+Welcome to SSHM by Florian Bruhin / The Compiler <florianbruh@gmail.com> modified by Ralf Matthes <info@rmatthes.de>
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Choose 'license' in the menu for more details.
 
@@ -88,7 +87,7 @@ fi
 
 while :; do
 	if [ "$nodlg" != 1 ]; then
-		eval dlginput=\`dialog --stdout --help-button --help-label "\"Menu\"" --cancel-label "\"Quit\"" --ok-label "\"Connect\"" --backtitle "\"remotegui V$version\"" --title "\"Choose Server\"" --menu "\"\"" 0 60 0 $dlg\`
+		eval dlginput=\`dialog --stdout --help-button --help-label "\"Menu\"" --cancel-label "\"Quit\"" --ok-label "\"Connect\"" --backtitle "\"SSHM V$version\"" --title "\"Choose Server\"" --menu "\"\"" 0 60 0 $dlg\`
 		status="$?"
 	else
 		nodlg=
@@ -118,12 +117,12 @@ while :; do
 						cmd="telnet $user $opt $3 $port"
 						;;
 				esac
-				eval "$cmd" 2\>$tmp/remoteguilog
+				eval "$cmd" 2\>$tmp/sshmlog
 				#=============================================================#				
-				sed -i "/Connection to .* closed./d;/Connection closed by foreign host./d" $tmp/remoteguilog # Remove uninterresting parts out of the error log, maybe more to remove???
-				if [ -s $tmp/remoteguilog ]; then
-					dialog --backtitle "remotegui V$version" --title "Error" --yes-label "View" --no-label "Don't view" --yesno "Oops, we hit an error. If you want to view the error message choose view, use q to quit." 0 0 && less $tmp/remoteguilog
-					rm $tmp/remoteguilog
+				sed -i "/Connection to .* closed./d;/Connection closed by foreign host./d" $tmp/sshmlog # Remove uninterresting parts out of the error log, maybe more to remove???
+				if [ -s $tmp/sshmlog ]; then
+					dialog --backtitle "SSHM V$version" --title "Error" --yes-label "View" --no-label "Don't view" --yesno "Oops, we hit an error. If you want to view the error message choose view, use q to quit." 0 0 && less $tmp/sshmlog
+					rm $tmp/sshmlog
 				fi
 			fi
 			;;
@@ -136,11 +135,11 @@ while :; do
 				args="\"Edit \\\\\"$file\\\\\"\" \"\" \"Delete \\\\\"$file\\\\\"\" \"\" \"Copy \\\\\"$file\\\\\"\" \"\" \"Change type of \\\\\"$file\\\\\"\" \"\" \"\" \"\""
 			fi
 
-			eval dlginput2=\`dialog --stdout --backtitle \""remotegui V$version"\" --title \""Menu"\" --menu \""$file"\" 0 0 0 \
+			eval dlginput2=\`dialog --stdout --backtitle \""SSHM V$version"\" --title \""Menu"\" --menu \""$file"\" 0 0 0 \
 				$args \
 				\""Add new profile"\" \"\" \
 				\""Show License"\" \"\" \
-				\""About remotegui"\" \"\"\`
+				\""About SSHM"\" \"\"\`
 			case "$dlginput2" in
 				#=============================================================#
 				"Edit \"$file\"")
@@ -157,7 +156,7 @@ while :; do
 						fail=1
 						while [ "$fail" = 1 ]; do
 							fail=
-							dlginput2=`dialog --stdout --backtitle "remotegui V$version" --title "Menu" --form "Enter the Server info. Please don't use backslash, backtick, hypen and tab." 0 0 0 \
+							dlginput2=`dialog --stdout --backtitle "SSHM V$version" --title "Menu" --form "Enter the Server info. Please don't use backslash, backtick, hypen and tab." 0 0 0 \
 								"Name" 1 1 "$file" 1 12 33 32 \
 								"User" 2 1 "$user" 2 12 33 32 \
 								"Server" 3 1 "$server" 3 12 33 256 \
@@ -177,7 +176,7 @@ while :; do
 								*)
 									#[ -z "$1" -o -z "$2" -o -z "$3" -o -z "$4" -o -z "$5" -o "$1" = 0 -o "$3" = 0 -o "$1" = ".copying" ] && fail=1
 									if [ "$fail" = 1 ]; then
-										dialog --stdout --backtitle "remotegui V$version" --title "Error" --msgbox "There was an error somewhere. Maybe you left something empty (enter 0 for unused values) or the profile already exists?" 0 0
+										dialog --stdout --backtitle "SSHM V$version" --title "Error" --msgbox "There was an error somewhere. Maybe you left something empty (enter 0 for unused values) or the profile already exists?" 0 0
 									else
 										echo "$type	$2	$3	$4" > "$dir/$file"
 										[ "$file" != "$1" ] && mv "$dir/$file" "$dir/$1"
@@ -191,7 +190,7 @@ while :; do
 				#=============================================================#
 				"Delete \"$file\"")
 					if [ ! -z "$dlginput" ]; then
-						dialog --stdout --backtitle "remotegui V$version" --title "Delete" --yesno "Really delete $file?" 0 0
+						dialog --stdout --backtitle "SSHM V$version" --title "Delete" --yesno "Really delete $file?" 0 0
 						case $? in
 							1|255)
 								nodlg=1
@@ -214,7 +213,7 @@ while :; do
 						fail=1
 						while [ "$fail" = 1 ]; do
 							fail=
-							dlginput2=`dialog --stdout --backtitle "remotegui V$version" --title "Copy" --inputbox "New filename?" 0 0 "$file"`
+							dlginput2=`dialog --stdout --backtitle "SSHM V$version" --title "Copy" --inputbox "New filename?" 0 0 "$file"`
 							case $? in
 								1|255)
 									fail=
@@ -223,7 +222,7 @@ while :; do
 									;;
 								*)
 									if [ -e "$dir/$dlginput2" ]; then
-										dialog --stdout --backtitle "remotegui V$version" --title "Copy" --msgbox "$dlginput does already exist." 0 0
+										dialog --stdout --backtitle "SSHM V$version" --title "Copy" --msgbox "$dlginput does already exist." 0 0
 										fail=1
 									else
 										cp "$dir/$file" "$dir/$dlginput2"
@@ -246,7 +245,7 @@ while :; do
 						IFS="	"
 						set -- $line
 						IFS="$OLDIFS"
-						type=`dialog --stdout --default-item "$1" --backtitle "remotegui V$version" --title "Add" --menu "Which type?" 0 0 0 \
+						type=`dialog --stdout --default-item "$1" --backtitle "SSHM V$version" --title "Add" --menu "Which type?" 0 0 0 \
 						"SSH" "" \
 						"Telnet" ""`
 						if [ "$type" != "$1" ]; then
@@ -259,7 +258,7 @@ while :; do
 				"Show License")
 					rep=1
 					while [ "$rep" = 1 ]; do
-						dialog --stdout --yes-label "View full license" --no-label "Back" --backtitle "remotegui V$version" --title "Welcome!" --yesno "$license" 0 0
+						dialog --stdout --yes-label "View full license" --no-label "Back" --backtitle "SSHM V$version" --title "Welcome!" --yesno "$license" 0 0
 						case $? in
 							1|255)
 								nodlg=1
@@ -267,7 +266,7 @@ while :; do
 								rep=
 								;;
 							*)
-								dialog --stdout --backtitle "remotegui V$version" --title "View License" --msgbox "Press q to quit the license" 0 0
+								dialog --stdout --backtitle "SSHM V$version" --title "View License" --msgbox "Press q to quit the license" 0 0
 								less "$dir/.copying"
 								;;
 						esac
@@ -277,7 +276,7 @@ while :; do
 					rep=1
 					while [ "$rep" = 1 ]; do
 						rep=
-						type=`dialog --stdout --backtitle "remotegui V$version" --title "Add" --menu "Which type?" 0 0 0 \
+						type=`dialog --stdout --backtitle "SSHM V$version" --title "Add" --menu "Which type?" 0 0 0 \
 						"SSH" "" \
 						"Telnet" ""`
 						case $? in
@@ -289,7 +288,7 @@ while :; do
 								fail=1
 								while [ "$fail" = 1 ]; do			
 									fail=
-									dlginput2=`dialog --stdout --backtitle "remotegui V$version" \
+									dlginput2=`dialog --stdout --backtitle "SSHM V$version" \
 										--title "Add" --form "Enter the Server info. Please only use A-Z, a-z, 0-9, . , - and _. If you don't want to fill out a field, just enter 0 there." 0 0 0 \
 										"Name" 1 1 "" 1 12 33 32 \
 										"User" 2 1 "" 2 12 33 32 \
@@ -310,7 +309,7 @@ while :; do
 		
 											[ -z "$1" -o -z "$2" -o -z "$3" -o -z "$4" -o -z "$5" -o "$1" = 0 -o "$3" = 0 -o -e "$dir/$1" -o "$1" = ".copying" ] && fail=1
 											if [ "$fail" = 1 ]; then
-												dialog --stdout --backtitle "remotegui V$version" --title "Error" --msgbox "There was an error somewhere. Maybe you left something empty (enter 0 for unused values) or the profile already exists?" 0 0
+												dialog --stdout --backtitle "SSHM V$version" --title "Error" --msgbox "There was an error somewhere. Maybe you left something empty (enter 0 for unused values) or the profile already exists?" 0 0
 											else
 												echo "$type	$2	$3	$4	$5" > "$dir/$1"
 												dlg="$dlg \"$1\" \"$type: $2@$3:$4\""
@@ -322,8 +321,8 @@ while :; do
 						esac
 					done
 					;;
-				"About remotegui")
-					dialog --stdout --backtitle "remotegui V$version" --title "About remotegui" --msgbox "$about" 0 0
+				"About sshm")
+					dialog --stdout --backtitle "SSHM V$version" --title "About SSHM" --msgbox "$about" 0 0
 					nodlg=1
 					status=2
 					;;
